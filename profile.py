@@ -4,7 +4,7 @@ import sys
 class Player():
     def __init__(self):
         #acquire player parameters
-        resolution = input('What is your resolution? (Compatibile resolutions include 1920x1080)\n')
+        resolution = input('What is your resolution? (Compatibile resolutions include anything with the same ratio as 1920x1080)\n')
         if resolution not in ['1920x1080', '2560x1440']:
             print('Incompatibile resolution found!')
             sys.exit(0)

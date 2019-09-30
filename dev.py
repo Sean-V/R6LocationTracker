@@ -27,12 +27,6 @@ while True:
     proc_image_location = process_image(crop_image_location, bound)
     proc_image_callout1 = process_image(crop_image_callout1, bound)
     proc_image_callout2 = process_image(crop_image_callout2, bound)
-    cv2.imshow('image', proc_image_location)
-    cv2.waitKey(0)
-    cv2.imshow('image', proc_image_callout1)
-    cv2.waitKey(0)
-    cv2.imshow('image', proc_image_callout2)
-    cv2.waitKey(0)
     #store result of OCR processing for each subset frame
     text_location = (image_to_string(proc_image_location, lang='eng')).upper()
     text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()
