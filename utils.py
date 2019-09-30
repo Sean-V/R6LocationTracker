@@ -13,8 +13,7 @@ accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
 def get_map_strings(map):
     strings = []
     for location in maps[map]:
-        for callout in maps[map][location]:
-            strings.append(location+callout)
+        strings.append(location)
     return strings
 
 #define a function to sanitize OCR output
@@ -33,7 +32,6 @@ def clean(output, map):
 #input: image, bound for determining white and black pixels
 #output: black and white image that OCR should be able to better perform on
 def process_image(image, bound):
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     for x in range(image.shape[0]):
         for y in range(image.shape[1]):
             if image[x][y] > bound:
