@@ -9,5 +9,5 @@ coastline.add_edges_from([
     ('EXTGARAGEROOF', 'EXTBACKALLEY'), ('EXTGARAGEROOF', 'EXTPOOL'), ('EXTGARAGEROOF', 'EXTMAINENTRANCE'),
     ('EXTBACKALLEY', 'EXTGARAGEROOF'), ('EXTBACKALLEY', 'EXTPOOL'), ('EXTBACKALLEY', 'EXTMAINENTRANCE')
 ])
-nx.draw(coastline, with_labels=True)
+nx.draw(coastline, pos=nx.planar_layout(coastline) , with_labels=True)
 plt.show()
