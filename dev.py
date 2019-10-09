@@ -1,5 +1,5 @@
 import sys
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 import numpy as np
 from utils import *
 from profile import Player
@@ -18,6 +18,10 @@ while True:
     #get frame from the game
     image = np.array(ImageGrab.grab(bbox=(0, 0, player.resolution[0], player.resolution[1])))
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    #try with contrast instead of brightness
+    #image = np.where((image*0.1) >= 255, image, image*0.1).astype(np.uint8)
+
     #crop current frame into subset frames
     crop_image_location = image[location[1]:location[1]+location[3], location[0]:location[0]+location[2]]
     crop_image_callout1 = image[callout1[1]:callout1[1]+callout1[3], callout1[0]:callout1[0]+callout1[2]]
@@ -40,5 +44,5 @@ while True:
     text_callout2 = (image_to_string(proc_image_callout2, lang='eng')).upper()
     text_callout = text_callout1 + text_callout2
     text = text_location + text_callout
-    print(clean(text, 'COASTLINE'))
+    print(clean(text))
     print('------------')

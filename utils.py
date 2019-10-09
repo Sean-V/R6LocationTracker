@@ -3,26 +3,25 @@ import sys
 from maps import *
 import stringdist
 import numpy as np
-
 #create a list of accepted symbols
 accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3']
 
 #create function that grabs all callouts for a given map
 #input: map
 #output: list of all string locations plus their callouts
-def get_map_strings(map):
+def get_map_strings():
     strings = []
-    for location in maps[map]:
+    for location in nx.nodes(coastline):
         strings.append(location)
     return strings
 
 #define a function to sanitize OCR output
 #input: output from OCR model and what map the player is on
 #output: sanitized text
-def clean(output, map):
+def clean(output):
     result =  "".join([symbol for symbol in output if symbol in accepted_symbols])
     #define an algorithm to check likely matching string for result
-    strings = get_map_strings(map)
+    strings = get_map_strings()
     matching_list = [(string, stringdist.levenshtein(result, string)) for string in strings]
     min_match = min(matching_list, key = lambda pairs: pairs[1])
     best_match = min_match[0] if min_match[1] <= 3 else None
