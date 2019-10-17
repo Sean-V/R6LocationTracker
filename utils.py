@@ -24,7 +24,7 @@ def clean(output):
     strings = get_map_strings()
     matching_list = [(string, stringdist.levenshtein(result, string)) for string in strings]
     min_match = min(matching_list, key = lambda pairs: pairs[1])
-    best_match = min_match[0] if min_match[1] <= 3 else None
+    best_match = min_match[0] if min_match[1] <= 2 else None
     return best_match
 
 #define a function to process an image before throwing it into OCR
@@ -56,6 +56,7 @@ def get_containers(resolution, aspect):
         location = (np.array([1350, 945, 200, 25])*(res_scale)).astype(int)
         callout1 = (np.array([1350, 970, 200, 25])*(res_scale)).astype(int)
         callout2 = (np.array([1350, 992, 200, 22])*(res_scale)).astype(int)
+        deathbox = (np.array([670, 67, 66, 58])*(res_scale)).astype(int)
     elif aspect == [5,4]:
         location = (np.array([1380, 945, 230, 25])*(res_scale)).astype(int)
         callout1 = (np.array([1380, 970, 230, 25])*(res_scale)).astype(int)
@@ -71,4 +72,4 @@ def get_containers(resolution, aspect):
     else:
         print('Incompatibile resolution or aspect ratio found!')
         sys.exit(0)
-    return location, callout1, callout2
+    return location, callout1, callout2, deathbox

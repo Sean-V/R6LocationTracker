@@ -41,5 +41,11 @@ coastline.add_edges_from([
     ('1FPOOLENTRANCE', '1FSUNRISEBAR'), ('1FPOOLENTRANCE', 'EXTRUINS'), ('1FPOOLENTRANCE', 'EXTPOOL'),
     ('2FBATHROOM', '2FPENTHOUSE')
 ])
-nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color='lightblue')
-plt.show()
+
+villa = nx.DiGraph()
+villa.add_edges_from([
+    ('', '')
+])
+
+#nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color='lightblue')
+#plt.show()
