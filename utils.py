@@ -1,12 +1,15 @@
+#This file contains different functions and tools that will be used for this project.
+
 import cv2
 import sys
-from maps import *
+from maps import coastline
 import stringdist
 import numpy as np
-#create a list of accepted symbols
+
+#Create a list of accepted symbols
 accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3']
 
-#create function that grabs all callouts for a given map
+#Define a function that grabs all callouts for a given map
 #input: map
 #output: list of all string locations plus their callouts
 def get_map_strings():
@@ -15,20 +18,20 @@ def get_map_strings():
         strings.append(location)
     return strings
 
-#define a function to sanitize OCR output
+#Define a function to sanitize OCR output
 #input: output from OCR model and what map the player is on
 #output: sanitized text
 def clean(output):
     result =  "".join([symbol for symbol in output if symbol in accepted_symbols])
-    #define an algorithm to check likely matching string for result
+    #Define an algorithm to check likely matching string for result
     strings = get_map_strings()
-    #error check
+    #Error check
     matching_list = [(string, stringdist.levenshtein(result, string)) for string in strings]
     min_match = min(matching_list, key = lambda pairs: pairs[1])
     best_match = min_match[0] if min_match[1] <= 2 else None
     return best_match
 
-#define a function to process an image before throwing it into OCR
+#Define a function to process an image before throwing it into OCR
 #input: image, bound for determining white and black pixels
 #output: black and white image that OCR should be able to better perform on
 def process_image(image, bound):
@@ -40,7 +43,7 @@ def process_image(image, bound):
                 image[x][y] = 255
     return image
 
-#define a function that determines where to crop image
+#Define a function that determines where to crop image
 #input: resolution and aspect ratio
 #output: list of containers
 def get_containers(resolution, aspect):
@@ -79,7 +82,7 @@ def get_containers(resolution, aspect):
         sys.exit(0)
     return location, callout1, callout2, playerbox
 
-#define a function that checks if the player is alive
+#Define a function that checks if the player is alive
 #input: pixel indicators for the playerbox
 #output: whether or not the player is alive
 def is_player_alive(indicators):
