@@ -43,7 +43,7 @@ coastline.add_edges_from([
     ('1FOFFICE', 'EXTTERRACE'), ('1FOFFICE', '1FSUNROOM'), ('1FOFFICE', '1FBLUEBAR'),
     ('1FPOOLENTRANCE', '1FSUNRISEBAR'), ('1FPOOLENTRANCE', 'EXTRUINS'), ('1FPOOLENTRANCE', 'EXTPOOL'),
     ('2FBATHROOM', '2FPENTHOUSE')
-])
+], edge_visited = 0)
 
 #Add default closed rooms
 coastline.add_edges_from([
@@ -63,6 +63,10 @@ coastline.add_edges_from([
     ('1FSECURITYROOM', '2FSOUTHHALLYWAY'),
     ('1FOFFICE', '2FAQUARIUM'),
     ('2FAQUARIUM', '1FOFFICE')
-], open = False)
+], open = False, edge_visited = 0)
+
+#Set node attributes for each map.
+nx.set_node_attributes(coastline, 0, 'node_visited')
+
 #nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color='lightblue')
 #plt.show()

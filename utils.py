@@ -8,7 +8,14 @@ import numpy as np
 import networkx as nx
 
 #Create a list of accepted symbols
-accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2','3']
+accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2']
+
+#Define a function that converts string representation of a map into its dictionary form at its DEFAULT state
+#input: String name of a map
+#output: Dictionary form of map in its DEFAULT state
+def get_map(map_string):
+    if map_string == 'COASTLINE':
+        return coastline
 
 #Define a function that grabs all callouts for a given map
 #input: map
@@ -22,7 +29,8 @@ def get_map_strings(map):
 #Define a function to sanitize OCR output
 #input: output from OCR model and what map the player is on
 #output: sanitized text
-def clean(output, map = coastline):
+def clean(output, map_string):
+    map = get_map(map_string)
     result =  "".join([symbol for symbol in output if symbol in accepted_symbols])
     #Define an algorithm to check likely matching string for result
     strings = get_map_strings(map)
