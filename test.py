@@ -45,3 +45,23 @@ def test_get_map():
 #Run tests
 test_get_map()
 ## TODO: TESTING: Add the rest of the maps to this test.
+
+#Create a test that checks if the update_data function works for a player object. Note that this specific test is used to check for updates in node_visited and edge_visited.
+#A failure in these assertions means that node_visited and edge_visited are not correctly being updated in player_data.
+def test_update_data():
+    test_map_coastline = coastline
+    path_traveled = ['EXTMAINENTRANCE', 'EXTPOOL', 'EXTRUINS', 'EXTROOFTOP', '1FCOURTYARD']
+    for index in range(len(path_traveled)):
+        test_map_coastline.nodes[path_traveled[index]]['node_visited'] += 1
+        if index != len(path_traveled) - 1:
+            test_map_coastline[path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
+    assert all(node[1]['node_visited'] == 1 for node in test_map_coastline.nodes(data=True) if node[0] in path_traveled)
+    assert all(node[1]['node_visited'] == 0 for node in test_map_coastline.nodes(data=True) if node[0] not in path_traveled)
+    assert test_map_coastline['EXTMAINENTRANCE']['EXTPOOL']['edge_visited'] == 1
+    assert test_map_coastline['EXTPOOL']['EXTRUINS']['edge_visited'] == 1
+    assert test_map_coastline['EXTRUINS']['EXTROOFTOP']['edge_visited'] == 1
+    assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD']['edge_visited'] == 1
+#Run tests
+test_update_data()
+
+## TODO: TESTING: Create specific test cases for certain paths traveled and provide correct data and updates for each instance. Ultimately, this test case will end up being all inclusive as to the workings of the program as a whole.

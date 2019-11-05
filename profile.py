@@ -49,3 +49,18 @@ class Player():
         player_file = open(f'profiles/{self.alias}.pickle', 'wb+')
         pickle.dump(self.player_data, player_file)
         player_file.close()
+
+    #Define a funtion that updates player data
+    #input: path traveled variable to parse for location transitions
+    #output: updates self.player_data with added map data
+    def update_data(self, path_traveled, map_string):
+        #For now, we are going to update the weights between edges and specific nodes. Nodes will represent if a player was at a certain location while edges will represent movement between two locations.
+        ## TODO: IDEA: Update each weight based on time factor in order to get a better idea of what areas players spend most of their time.
+        for index in range(len(path_traveled)):
+            #Update node_visited
+            self.player_data[map_string].nodes[path_traveled[index]]['node_visited'] += 1
+            #Update edge_visited
+            if index != len(path_traveled) - 1:
+                #Use try except for now in order to skip location changes that are not valid.
+                ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
+                self.player_data[map_string][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1

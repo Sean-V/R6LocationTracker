@@ -83,21 +83,10 @@ while True:
     else:
         #If player is dead, we need to store path traveled data if data exists
         if len(path_traveled) > 0:
-            #Perform updates to player_data based on the path traveled.
-            #For now, we are going to update the weights between edges and specific nodes. Nodes will represent if a player was at a certain location while edges will represent movement between two locations.
-            ## TODO: IDEA: Update each weight based on time factor in order to get a better idea of what areas players spend most of their time.
-            for index in range(len(path_traveled)):
-                #Update node_visited
-                player.player_data[map_string].nodes[path_traveled[index]]['node_visited'] += 1
-                #Update edge_visited
-                if index != len(path_traveled) - 1:
-                    #Use try except for now in order to skip location changes that are not valid.
-                    ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
-                    player.player_data[map_string][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
+            #Perform updates to player_data
+            player.update_data(path_traveled, map_string)
             ## TODO: SCALABILITY: Currently this method is loading and updating the player's save file every round. This is inefficient, but will work for testing. Later on a method should be devised to update on a per game basis.
             player.store_data()
-            print(player.player_data[map_string].nodes(data=True))
-            print(player.player_data[map_string].edges(data=True))
         #If the player is dead, we need to reset the path traveled variable
         path_traveled = []
 
@@ -108,4 +97,6 @@ while True:
     #print(current_pos)
     #print(path_traveled)
     #print(player_alive)
+    #print(player.player_data[map_string].nodes(data=True))
+    #print(player.player_data[map_string].edges(data=True))
     #print('------------')
