@@ -62,5 +62,4 @@ class Player():
             #Update edge_visited
             if index != len(path_traveled) - 1:
                 #Use try except for now in order to skip location changes that are not valid.
-                ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
                 self.player_data[map_string][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1

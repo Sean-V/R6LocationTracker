@@ -74,10 +74,11 @@ while True:
         current_pos = text
         #This takes care of the first instance when there is no previously traveled location (the player has just spawned)
         if len(path_traveled) == 0 and current_pos != None:
-                path_traveled.append(current_pos)
+            path_traveled.append(current_pos)
         #This takes care of every other relevant instance of changes in location
         elif current_pos != None and path_traveled[-1] != current_pos:
             path_traveled.append(current_pos)
+        ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
 
     #This next part will determine what to do when the player is deemed to not be alive.
     else:
