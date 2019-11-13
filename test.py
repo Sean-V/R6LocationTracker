@@ -1,7 +1,8 @@
 #This file will contain different tests to make sure the code works across different versions.
 
-from maps import coastline
 from utils import *
+import random
+import matplotlib.pyplot as plt
 
 #Create a function that makes sure that for every edge, the inverse of that edge exists
 #An error in assertion would be the result of inproper graphing of a map.
@@ -63,5 +64,37 @@ def test_update_data():
     assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD']['edge_visited'] == 1
 #Run tests
 test_update_data()
+
+#Create a test to test the visualizer with node and edge data only.
+#This test will be run and evaluated intuitively.
+def test_node_edge_visuals():
+    #Change map to test for different maps
+    test_map = coastline
+    node_color_map = []
+    for node in test_map.nodes(data=True):
+        node[1]['node_visited'] = random.randint(0,100)
+    mean_node_visited = sum([node[1]['node_visited'] for node in test_map.nodes(data=True)])//len(test_map.nodes())
+    for node in test_map.nodes(data=True):
+        if node[1]['node_visited'] <= mean_node_visited - (mean_node_visited//2):
+            node_color_map.append('blue')
+        elif node[1]['node_visited'] <= mean_node_visited + (mean_node_visited//2):
+            node_color_map.append('yellow')
+        else:
+            node_color_map.append('red')
+    edge_color_map = []
+    for edge in test_map.edges(data=True):
+        edge[-1]['edge_visited'] = random.randint(0,100)
+    mean_edge_visited = sum([edge[-1]['edge_visited'] for edge in test_map.edges(data=True)])//len(test_map.edges())
+    for edge in test_map.edges(data=True):
+        if edge[-1]['edge_visited'] <= mean_edge_visited - (mean_edge_visited//2):
+            edge_color_map.append('blue')
+        elif edge[-1]['edge_visited'] <= mean_edge_visited + (mean_edge_visited//2):
+            edge_color_map.append('yellow')
+        else:
+            edge_color_map.append('red')
+    nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
+    plt.show()
+#Run test
+test_node_edge_visuals()
 
 ## TODO: TESTING: Create specific test cases for certain paths traveled and provide correct data and updates for each instance. Ultimately, this test case will end up being all inclusive as to the workings of the program as a whole.

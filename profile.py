@@ -3,6 +3,8 @@
 from maps import coastline
 from os import path
 import pickle
+import matplotlib.pyplot as plt
+import networkx as nx
 
 class Player():
     def __init__(self):
@@ -63,3 +65,43 @@ class Player():
             if index != len(path_traveled) - 1:
                 #Use try except for now in order to skip location changes that are not valid.
                 self.player_data[map_string][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
+
+    #Define a function that outputs a visualization of the data.
+    #input: map_string
+    #output: visual of data
+    def visualize_data(self, map_string):
+        #Define the map based on map_string
+        map = self.player_data[map_string]
+        #Define colormap to store the colors of the nodes
+        node_color_map = []
+        #Calculate the mean value of the node_visited attribute
+        mean_node_visited = sum([node[1]['node_visited'] for node in map.nodes(data=True)])//len(map.nodes())
+        #Color nodes based on the mean plus/minus half the mean
+        for node in map.nodes(data=True):
+            if node[1]['node_visited'] <= mean_node_visited - (mean_node_visited//2):
+                #Blue is lightly traveled
+                node_color_map.append('blue')
+            elif node[1]['node_visited'] <= mean_node_visited + (mean_node_visited//2):
+                #Yellow is average traveled
+                node_color_map.append('yellow')
+            else:
+                #Red is heavily traveled
+                node_color_map.append('red')
+        #Define colormap to store the colors of the edges
+        edge_color_map = []
+        #Calculate the mean value of the edge_visited attribute
+        mean_edge_visited = sum([edge[-1]['edge_visited'] for edge in map.edges(data=True)])//len(map.edges())
+        #Color edges based on the mean plus/minus half the mean
+        for edge in map.edges(data=True):
+            if edge[-1]['edge_visited'] <= mean_edge_visited - (mean_edge_visited//2):
+                #Blue is lightly traveled
+                edge_color_map.append('blue')
+            elif edge[-1]['edge_visited'] <= mean_edge_visited + (mean_edge_visited//2):
+                #Yellow is average traveled
+                edge_color_map.append('yellow')
+            else:
+                #Red is heavily traveled
+                edge_color_map.append('red')
+        #Graph the map with the colored nodes and edges
+        nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
+        plt.show()

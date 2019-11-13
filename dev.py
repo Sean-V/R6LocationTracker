@@ -2,7 +2,6 @@
 
 from os import path
 from PIL import ImageGrab, Image
-import numpy as np
 from utils import *
 from profile import Player
 import pytesseract
@@ -17,7 +16,12 @@ player = Player()
 ## TODO: SCALABILITY: Find some method to determien the map and pass that variable into functions versus using a default of COASTLINE
 map_string = 'COASTLINE'
 
-#define some initial variables
+#Output current data for player for testing
+#print(player.player_data[map_string].nodes(data=True))
+#print(player.player_data[map_string].edges(data=True))
+#player.visualize_data(map_string)
+
+#Define some initial variables
 #location, callout1, callout2, playerbox will contain coordinates needed to grab specific data from each screen
 location, callout1, callout2, playerbox = get_containers(player.resolution, player.aspect_ratio)
 #Path traveled will contain the path for any given round. This will be reinitialized every round.
@@ -79,6 +83,7 @@ while True:
         elif current_pos != None and path_traveled[-1] != current_pos:
             path_traveled.append(current_pos)
         ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
+        print(path_traveled)
 
     #This next part will determine what to do when the player is deemed to not be alive.
     else:
@@ -88,16 +93,8 @@ while True:
             player.update_data(path_traveled, map_string)
             ## TODO: SCALABILITY: Currently this method is loading and updating the player's save file every round. This is inefficient, but will work for testing. Later on a method should be devised to update on a per game basis.
             player.store_data()
+            print("Data Saved")
         #If the player is dead, we need to reset the path traveled variable
         path_traveled = []
 
     #PRINT STATEMENTS FOR TESTING
-    #cv2.imshow('test1', crop_image_playerbox)
-    #cv2.waitKey(0)
-    #print(playerbox_indicators)
-    #print(current_pos)
-    #print(path_traveled)
-    #print(player_alive)
-    #print(player.player_data[map_string].nodes(data=True))
-    #print(player.player_data[map_string].edges(data=True))
-    #print('------------')
