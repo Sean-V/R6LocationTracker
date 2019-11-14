@@ -11,8 +11,8 @@ class Player():
         #Ask for player's in game name to either load or create a profile
         self.alias = input('Enter your in game name for Rainbow Six Siege:\n')
         #Check if player file exists already
-        if path.exists(f'profiles/{self.alias}.pickle'):
-            player_file = open(f'profiles/{self.alias}.pickle', 'rb')
+        if path.exists(f'../profiles/{self.alias}.pickle'):
+            player_file = open(f'../profiles/{self.alias}.pickle', 'rb')
             self.player_data = pickle.load(player_file)
             #Player's resolution as given by tuple
             self.resolution = self.player_data['resolution']
@@ -40,7 +40,7 @@ class Player():
                 'aspect_ratio':self.aspect_ratio,
                 'COASTLINE':coastline
             }
-            player_file = open(f'profiles/{self.alias}.pickle', 'wb+')
+            player_file = open(f'../profiles/{self.alias}.pickle', 'wb+')
             pickle.dump(self.player_data, player_file)
             player_file.close()
 
@@ -48,7 +48,7 @@ class Player():
     #input: player object and data
     #output: appends new data to player's existing data
     def store_data(self):
-        player_file = open(f'profiles/{self.alias}.pickle', 'wb+')
+        player_file = open(f'../profiles/{self.alias}.pickle', 'wb+')
         pickle.dump(self.player_data, player_file)
         player_file.close()
 

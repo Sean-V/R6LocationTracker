@@ -1,7 +1,6 @@
 #This file will be used for developmental purposes. Ultimately, the purpose of this file is to act as the main.
 
 from os import path
-from PIL import ImageGrab, Image
 from utils import *
 from profile import Player
 import pytesseract
@@ -28,10 +27,8 @@ location, callout1, callout2, playerbox = get_containers(player.resolution, play
 path_traveled = []
 
 while True:
-    #This loop will gather round-based data:
-
     #First we must get the frame from the game
-    image = np.array(ImageGrab.grab(bbox=(0, 0, player.resolution[0], player.resolution[1])))
+    image = np.array(screen_capture(player.resolution))
 
     #Then we must find the indicators that tell us whether the player is alive. This information comes from an area we call the playerbox. The playerbox is the icon for the player found on the HUD. In this case we want to see if there is a white box surrounding this player icon. This tells us whether the player is still alive.
     crop_image_playerbox = image[playerbox[1]:playerbox[1]+playerbox[3], playerbox[0]:playerbox[0]+playerbox[2]]

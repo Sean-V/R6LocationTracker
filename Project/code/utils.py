@@ -6,6 +6,8 @@ from maps import coastline
 import stringdist
 import numpy as np
 import networkx as nx
+#from mss import mss
+from PIL import ImageGrab, Image
 
 #Create a list of accepted symbols
 accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','1','2']
@@ -99,3 +101,16 @@ def is_player_alive(indicators):
         if not (np.array([255,255,255])==indicator).all():
             return False
     return True
+
+#Define a function to capture the screen
+#input: N/A
+#output: screen capture
+def screen_capture(resolution):
+    #MSS implementation is slower but cross OS
+    #with mss() as sct:
+    #    monitor = sct.monitors[2]
+    #    sct_img = sct.grab(monitor)
+    #    return Image.frombytes('RGB', sct_img.size, sct_img.bgra, 'raw', 'BGRX')
+
+    #ImageGrab is faster but Windows only
+    return ImageGrab.grab(bbox=(0, 0, resolution[0], resolution[1]))

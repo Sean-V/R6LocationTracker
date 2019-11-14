@@ -1,0 +1,11 @@
+#from python image
+FROM python:3.7.3
+#create directory in container
+RUN mkdir R6LocationTracker
+#copy local directories to container's directories
+COPY . R6LocationTracker
+#install dependencies
+RUN pip install --upgrade pip
+RUN pip install -r R6LocationTracker/stable-requirements.txt
+#running dev.py in container
+CMD python R6LocationTracker/code/dev.py
