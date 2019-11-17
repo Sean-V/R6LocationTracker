@@ -1,6 +1,8 @@
 #This file will contain different tests to make sure the code works across different versions.
 
-from utils import *
+from utils import get_map_location_strings, clean, get_round_map_status
+from maps import coastline, border, kafedostoyevsky, clubhouse, villa, consulate, bank, map_spawns
+import networkx as nx
 import random
 import matplotlib.pyplot as plt
 
@@ -11,16 +13,6 @@ def test_paths(map):
 #Run test by passing in a map
 test_paths(coastline)
 ## TODO: TESTING: Add the rest of the maps once they are complete.
-
-#Create a function that checks if the get_containers function works. The input for this test should be a list of valid resolutions and a list of valid aspect ratios.
-#A failure would result from mishandling of user-inputted data for resolution and aspect ratio.
-def test_get_containers(resolutions, aspect_ratios):
-    for resolution in resolutions:
-        for aspect_ratio in aspect_ratios:
-            assert get_containers(resolution, aspect_ratio)
-#Run test by passing list of resolutions and aspect ratios
-test_get_containers([[1920,1080], [1280,720], [2560,1440]], [[3,2], [4,3], [5,4], [16,9], [16,10]])
-## TODO: TESTING: Note that we have not yet completely dealt with error handling of inproper inputs. This will be taked care of when making the UI. Therefore, we currently have no test for inproper inputs.
 
 #Create a function that checks if the clean function works for text related to the OCR.
 #A failed assertion will most likely be due to a failure in the bound variable or the lenience in error.
@@ -35,17 +27,10 @@ test_clean()
 #Create a test funtion that makes sure that each map has the correct number of nodes. To test this, we will be testing the functionality of the get_map_strings function.
 #A failure in assertion here would be caused by incorrect graphing of a map or an incorrect grabbing of nodes.
 def test_get_map_strings(map, nodes_expected):
-    assert len(get_map_strings(map)) == nodes_expected
+    assert len(get_map_location_strings(map)) == nodes_expected
 #Run the test by passing in a map and the expected number of nodes.
 test_get_map_strings(coastline, 37)
 ## TODO: TESTING: Add for each map and double check the coastline nodes_expected value by counting by hand.
-
-#Create a quick test function to make sure get_map returns the default state of a map.
-def test_get_map():
-    assert get_map('COASTLINE') == coastline
-#Run tests
-test_get_map()
-## TODO: TESTING: Add the rest of the maps to this test.
 
 #Create a test that checks if the update_data function works for a player object. Note that this specific test is used to check for updates in node_visited and edge_visited.
 #A failure in these assertions means that node_visited and edge_visited are not correctly being updated in player_data.
@@ -92,9 +77,32 @@ def test_node_edge_visuals():
             edge_color_map.append('yellow')
         else:
             edge_color_map.append('red')
-    nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
-    plt.show()
+    #nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
+    #plt.show()
 #Run test
 test_node_edge_visuals()
+
+#Create a test that checks if all map spawns are unique. This is important because if they are, then we are able to differentiate between maps based on spawn.
+def test_unique_spawns():
+    all_spawns = sum([sum(list(dictionary.values()), []) for dictionary in list(map_spawns.values())], [])
+    for index, spawn in enumerate(all_spawns):
+        if spawn in all_spawns[index+1:]:
+            return False
+    return True
+
+#Run test
+assert test_unique_spawns() == True
+
+#Create test asserions to see if the get_round_map_status function appears to work properly
+assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK')
+assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF')
+assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK')
+assert get_round_map_status('WRONGINPUT') == (None, None)
+
+#Create a generic funtion that can be used to run test code to put in places that are not run easily.
+def generic_test():
+    pass
+#Run generic test
+generic_test()
 
 ## TODO: TESTING: Create specific test cases for certain paths traveled and provide correct data and updates for each instance. Ultimately, this test case will end up being all inclusive as to the workings of the program as a whole.

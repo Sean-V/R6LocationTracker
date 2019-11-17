@@ -1,7 +1,6 @@
 #This file contains map information.
 
 import networkx as nx
-import matplotlib.pyplot as plt
 
 #Initialize map graphs
 coastline = nx.DiGraph()
@@ -11,6 +10,35 @@ clubhouse = nx.DiGraph()
 villa = nx.DiGraph()
 consulate = nx.DiGraph()
 bank = nx.DiGraph()
+
+#Define map spawns
+coastline_atk_spawns = ['EXTMAINENTRANCE', 'EXTPOOL', 'EXTRUINS']
+coastline_def_spawns = ['2FPENTHOUSE', '2FTHEATER', '2FBILLIARDSROOM', '2FHOOKAHLOUNGE', '1FSERVICEENTRANCE', '1FKITCHEN', '1FBLUEBAR', '1FSUNRISEBAR']
+border_atk_spawns = ['EXTVALLEY']
+border_def_spawns = []
+kafedostoyevsky_atk_spawns = []
+kafedostoyevsky_def_spawns = []
+clubhouse_atk_spawns = []
+clubhouse_def_spawns = []
+villa_atk_spawns = []
+villa_def_spawns = []
+consulate_atk_spawns = []
+consulate_def_spawns = []
+bank_atk_spawns = []
+bank_def_spawns = []
+#Define dictionary to store map spawns. Index 0 is atk and index 1 is def.
+map_spawns = {
+    'COASTLINE':{'ATK':coastline_atk_spawns, 'DEF':coastline_def_spawns},
+    'BORDER':{'ATK':border_atk_spawns, 'DEF':border_def_spawns},
+    'KAFEDOSTOYEVSKY':{'ATK':kafedostoyevsky_atk_spawns, 'DEF':kafedostoyevsky_def_spawns},
+    'CLUBHOUSE':{'ATK':clubhouse_atk_spawns, 'DEF':clubhouse_def_spawns},
+    'VILLA':{'ATK':villa_atk_spawns, 'DEF':villa_def_spawns},
+    'CONSULATE':{'ATK':consulate_atk_spawns, 'DEF':consulate_def_spawns},
+    'BANK':{'ATK':bank_atk_spawns, 'DEF':bank_def_spawns}
+}
+
+#Define map_strings list
+map_strings = list(map_spawns.keys())
 
 #Add default open rooms for each map
 coastline.add_edges_from([

@@ -1,6 +1,6 @@
 #This file contains the profile class which will be used to keep track of player data.
 
-from maps import coastline
+from maps import coastline, border, kafedostoyevsky, clubhouse, villa, consulate, bank
 from os import path
 import pickle
 import matplotlib.pyplot as plt
@@ -38,7 +38,13 @@ class Player():
             self.player_data = {
                 'resolution':self.resolution,
                 'aspect_ratio':self.aspect_ratio,
-                'COASTLINE':coastline
+                'COASTLINE':{'ATK':coastline, 'DEF':coastline},
+                'BORDER':{'ATK':border, 'DEF':border},
+                'KAFEDOSTOYEVSKY':{'ATK':kafedostoyevsky, 'DEF':kafedostoyevsky},
+                'CLUBHOUSE':{'ATK':clubhouse, 'DEF':clubhouse},
+                'VILLA':{'ATK':villa, 'DEF':villa},
+                'CONSULATE':{'ATK':consulate, 'DEF':consulate},
+                'BANK':{'ATK':bank, 'DEF':bank}
             }
             player_file = open(f'../profiles/{self.alias}.pickle', 'wb+')
             pickle.dump(self.player_data, player_file)
@@ -55,16 +61,20 @@ class Player():
     #Define a funtion that updates player data
     #input: path traveled variable to parse for location transitions
     #output: updates self.player_data with added map data
-    def update_data(self, path_traveled, map_string):
+    def update_data(self, path_traveled, map_string, affiliation):
         #For now, we are going to update the weights between edges and specific nodes. Nodes will represent if a player was at a certain location while edges will represent movement between two locations.
         ## TODO: IDEA: Update each weight based on time factor in order to get a better idea of what areas players spend most of their time.
         for index in range(len(path_traveled)):
             #Update node_visited
-            self.player_data[map_string].nodes[path_traveled[index]]['node_visited'] += 1
+            self.player_data[map_string][affiliation].nodes[path_traveled[index]]['node_visited'] += 1
             #Update edge_visited
             if index != len(path_traveled) - 1:
-                #Use try except for now in order to skip location changes that are not valid.
-                self.player_data[map_string][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
+                #Use try except in order to skip location changes that are not valid.
+                try:
+                    self.player_data[map_string][affiliation][path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
+                except:
+                    ## TODO: ACCURACY: Have some sort of correction or disregard method that is more extensive than what is currently in place.
+                    pass
 
     #Define a function that outputs a visualization of the data.
     #input: map_string

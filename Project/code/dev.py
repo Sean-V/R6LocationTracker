@@ -1,9 +1,11 @@
 #This file will be used for developmental purposes. Ultimately, the purpose of this file is to act as the main.
 
 from os import path
-from utils import *
+import cv2
+from utils import clean, process_image, get_containers, is_player_alive, screen_capture, get_round_map_status
 from profile import Player
 import pytesseract
+import numpy as np
 from pytesseract import image_to_string
 ## TODO: USER: Change this pathing to be universal among users. It might be helpful to look at tesseract-OCR's installation manual and how they suggest setting the path.
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Users\\svand\\AppData\\Local\\Tesseract-OCR\\tesseract.exe'
@@ -86,8 +88,10 @@ while True:
     else:
         #If player is dead, we need to store path traveled data if data exists
         if len(path_traveled) > 0:
+            #Determine what player data needs to be updated
+            map, affiliation = get_round_map_status(path_traveled[0])
             #Perform updates to player_data
-            player.update_data(path_traveled, map_string)
+            player.update_data(path_traveled, map, affiliation)
             ## TODO: SCALABILITY: Currently this method is loading and updating the player's save file every round. This is inefficient, but will work for testing. Later on a method should be devised to update on a per game basis.
             player.store_data()
             print("Data Saved")
