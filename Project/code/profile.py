@@ -115,3 +115,4 @@ class Player():
         #Graph the map with the colored nodes and edges
         nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
         plt.show()
+        

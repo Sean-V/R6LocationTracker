@@ -1,6 +1,6 @@
 #This file will be used for developmental purposes. Ultimately, the purpose of this file is to act as the main.
 
-from os import path
+import os
 import cv2
 from utils import clean, process_image, get_containers, is_player_alive, screen_capture, get_round_map_status
 from profile import Player
@@ -8,14 +8,11 @@ import pytesseract
 import numpy as np
 from pytesseract import image_to_string
 ## TODO: USER: Change this pathing to be universal among users. It might be helpful to look at tesseract-OCR's installation manual and how they suggest setting the path.
-pytesseract.pytesseract.tesseract_cmd = 'C:\\Users\\svand\\AppData\\Local\\Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = 'C:{}\\AppData\\Local\\Tesseract-OCR\\tesseract.exe'.format(os.environ['HOMEPATH'])
 
 ## TODO: USER: Make some sort of GUI for the player to interact with where they can login and store their own profiles. For now we will just import a test player object to work with.
 #For now we will incorporate a preliminary UI that will run in the terminal. This will be built in the Player class in profile.py. This will allow us to easily remove the UI later.
 player = Player()
-
-## TODO: SCALABILITY: Find some method to determien the map and pass that variable into functions versus using a default of COASTLINE
-map_string = 'COASTLINE'
 
 #Output current data for player for testing
 #print(player.player_data[map_string].nodes(data=True))
@@ -27,6 +24,7 @@ map_string = 'COASTLINE'
 location, callout1, callout2, playerbox = get_containers(player.resolution, player.aspect_ratio)
 #Path traveled will contain the path for any given round. This will be reinitialized every round.
 path_traveled = []
+map_string, affiliation = None, None
 
 while True:
     #First we must get the frame from the game
@@ -70,32 +68,34 @@ while True:
         text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()
         text_callout2 = (image_to_string(proc_image_callout2, lang='eng')).upper()
         text_callout = text_callout1 + text_callout2
-        text = clean(text_location + text_callout, map_string)
-
-        #Now that we have our text, we will check if a valid callout is constructed. If it is, we will check if a player has moved from their current position. If so, the callout will be added to a list that represents the path traveled.
-        #Start storing location changes into a list
-        current_pos = text
-        #This takes care of the first instance when there is no previously traveled location (the player has just spawned)
-        if len(path_traveled) == 0 and current_pos != None:
-            path_traveled.append(current_pos)
-        #This takes care of every other relevant instance of changes in location
-        elif current_pos != None and path_traveled[-1] != current_pos:
-            path_traveled.append(current_pos)
-        ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
-        print(path_traveled)
+        #If map and affiliation not known, then we need to try to determine map and affiliation for round
+        if (map_string, affiliation) == (None, None):
+            map_string, affiliation = get_round_map_status(text_location + text_callout)
+        #If map and affiliation are known then we can build paths
+        if (map_string, affiliation) != (None, None):
+            text = clean(text_location + text_callout, map_string)
+            #Now that we have our text, we will check if a valid callout is constructed. If it is, we will check if a player has moved from their current position. If so, the callout will be added to a list that represents the path traveled.
+            #Start storing location changes into a list
+            current_pos = text
+            #This takes care of the first instance when there is no previously traveled location (the player has just spawned)
+            if len(path_traveled) == 0 and current_pos != None:
+                path_traveled.append(current_pos)
+                print(path_traveled)
+            #This takes care of every other relevant instance of changes in location
+            elif current_pos != None and path_traveled[-1] != current_pos:
+                path_traveled.append(current_pos)
+                print(path_traveled)
+            ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
 
     #This next part will determine what to do when the player is deemed to not be alive.
     else:
         #If player is dead, we need to store path traveled data if data exists
         if len(path_traveled) > 0:
-            #Determine what player data needs to be updated
-            map, affiliation = get_round_map_status(path_traveled[0])
             #Perform updates to player_data
-            player.update_data(path_traveled, map, affiliation)
+            player.update_data(path_traveled, map_string, affiliation)
             ## TODO: SCALABILITY: Currently this method is loading and updating the player's save file every round. This is inefficient, but will work for testing. Later on a method should be devised to update on a per game basis.
             player.store_data()
-            print("Data Saved")
+            print("Data saved to {} : {}".format(map_string, affiliation))
         #If the player is dead, we need to reset the path traveled variable
         path_traveled = []
-
-    #PRINT STATEMENTS FOR TESTING
+        map_string, affiliation = None, None

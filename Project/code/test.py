@@ -9,9 +9,13 @@ import matplotlib.pyplot as plt
 #Create a function that makes sure that for every edge, the inverse of that edge exists
 #An error in assertion would be the result of inproper graphing of a map.
 def test_paths(map):
-    assert len([edge for edge in map.edges() if (edge[1], edge[0]) not in map.edges()]) == 0
+    bad_edges = [edge for edge in map.edges() if (edge[1], edge[0]) not in map.edges()]
+    if bad_edges:
+        print(bad_edges)
+    assert len(bad_edges) == 0
 #Run test by passing in a map
 test_paths(coastline)
+test_paths(border)
 ## TODO: TESTING: Add the rest of the maps once they are complete.
 
 #Create a function that checks if the clean function works for text related to the OCR.
@@ -30,7 +34,8 @@ def test_get_map_strings(map, nodes_expected):
     assert len(get_map_location_strings(map)) == nodes_expected
 #Run the test by passing in a map and the expected number of nodes.
 test_get_map_strings(coastline, 37)
-## TODO: TESTING: Add for each map and double check the coastline nodes_expected value by counting by hand.
+test_get_map_strings(border, 47)
+## TODO: TESTING: Add for each map and double check nodes_expected by counting by hand
 
 #Create a test that checks if the update_data function works for a player object. Note that this specific test is used to check for updates in node_visited and edge_visited.
 #A failure in these assertions means that node_visited and edge_visited are not correctly being updated in player_data.
@@ -93,11 +98,15 @@ def test_unique_spawns():
 #Run test
 assert test_unique_spawns() == True
 
-#Create test asserions to see if the get_round_map_status function appears to work properly
+#Create assertions for get_round_map_status function
 assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK')
+assert get_round_map_status('XTMAINENTRANC') == ('COASTLINE', 'ATK')
 assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF')
+assert get_round_map_status('2FTEATE') == ('COASTLINE', 'DEF')
 assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK')
-assert get_round_map_status('WRONGINPUT') == (None, None)
+assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK')
+assert get_round_map_status('EXT') == (None, None)
+assert get_round_map_status('VALLEY') == (None, None)
 
 #Create a generic funtion that can be used to run test code to put in places that are not run easily.
 def generic_test():

@@ -18,6 +18,18 @@ accepted_symbols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
 def get_map(map_string):
     if map_string == 'COASTLINE':
         return coastline
+    elif map_string == 'BORDER':
+        return border
+    elif map_string == 'KAFEDOSTOYEVSKY':
+        return kafedostoyevsky
+    elif map_string == 'CLUBHOUSE':
+        return clubhouse
+    elif map_string == 'VILLA':
+        return villa
+    elif map_string == 'CONSULATE':
+        return consulate
+    elif map_string == 'BANK':
+        return bank
 
 #Define a function that grabs all callouts for a given map
 #input: map
@@ -117,16 +129,19 @@ def screen_capture(resolution):
 
 #Create a function that returns whether the player was/is on attack or defense
 def get_round_map_status(callout):
-    #Indirectly determine if the player is attacking
-    desired_entry = list(filter(lambda spawns: callout in spawns['ATK'], [map_spawns[map] for map in map_spawns]))
-    affiliation = 'ATK'
-    if not desired_entry:
-        #Indirectly determine if the player is defending
-        desired_entry = list(filter(lambda spawns: callout in spawns['DEF'], [map_spawns[map] for map in map_spawns]))
-        affiliation = 'DEF'
-    if not desired_entry:
-        return None, None
-    #Determine which map player is on based on spawn location
-    result_map = list(filter(lambda map_name: [map_spawns[map_name]] == desired_entry, map_spawns))
-    if result_map:
-        return result_map[0], affiliation
+    #Search through maps
+    for map in map_spawns:
+        #Search through affiliations
+        for affiliation in map_spawns[map]:
+            #Get possible spawn locations
+            strings = map_spawns[map][affiliation]
+            #Build matching list using levenshtein
+            matching_list = [(string, stringdist.levenshtein(callout, string)) for string in strings]
+            if matching_list:
+                #Find best match if one exists
+                min_match = min(matching_list, key = lambda pairs: pairs[1])
+                best_match = min_match[0] if min_match[1] <= 2 else None
+                if best_match != None:
+                    return map, affiliation
+    #Default None, None if best match not found accross all maps
+    return None, None
