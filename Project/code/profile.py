@@ -1,7 +1,7 @@
 #This file contains the profile class which will be used to keep track of player data.
 
 from maps import coastline, border, kafedostoyevsky, clubhouse, villa, consulate, bank
-from os import path
+import os
 import pickle
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -11,7 +11,7 @@ class Player():
         #Ask for player's in game name to either load or create a profile
         self.alias = input('Enter your in game name for Rainbow Six Siege:\n')
         #Check if player file exists already
-        if path.exists(f'../profiles/{self.alias}.pickle'):
+        if os.path.exists(f'../profiles/{self.alias}.pickle'):
             player_file = open(f'../profiles/{self.alias}.pickle', 'rb')
             self.player_data = pickle.load(player_file)
             #Player's resolution as given by tuple
@@ -46,6 +46,8 @@ class Player():
                 'CONSULATE':{'ATK':consulate, 'DEF':consulate},
                 'BANK':{'ATK':bank, 'DEF':bank}
             }
+            if not os.path.exists('../profiles'):
+                os.makedirs('../profiles')
             player_file = open(f'../profiles/{self.alias}.pickle', 'wb+')
             pickle.dump(self.player_data, player_file)
             player_file.close()
@@ -115,4 +117,3 @@ class Player():
         #Graph the map with the colored nodes and edges
         nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
         plt.show()
-        
