@@ -5,6 +5,8 @@ import os
 import pickle
 import matplotlib.pyplot as plt
 import networkx as nx
+import sys
+from utils import get_map
 
 class Player():
     def __init__(self):
@@ -38,13 +40,13 @@ class Player():
             self.player_data = {
                 'resolution':self.resolution,
                 'aspect_ratio':self.aspect_ratio,
-                'COASTLINE':{'ATK':coastline, 'DEF':coastline},
-                'BORDER':{'ATK':border, 'DEF':border},
-                'KAFEDOSTOYEVSKY':{'ATK':kafedostoyevsky, 'DEF':kafedostoyevsky},
-                'CLUBHOUSE':{'ATK':clubhouse, 'DEF':clubhouse},
-                'VILLA':{'ATK':villa, 'DEF':villa},
-                'CONSULATE':{'ATK':consulate, 'DEF':consulate},
-                'BANK':{'ATK':bank, 'DEF':bank}
+                'COASTLINE':{'ATK':coastline.copy(), 'DEF':coastline.copy()},
+                'BORDER':{'ATK':border.copy(), 'DEF':border.copy()},
+                'KAFEDOSTOYEVSKY':{'ATK':kafedostoyevsky.copy(), 'DEF':kafedostoyevsky.copy()},
+                'CLUBHOUSE':{'ATK':clubhouse.copy(), 'DEF':clubhouse.copy()},
+                'VILLA':{'ATK':villa.copy(), 'DEF':villa.copy()},
+                'CONSULATE':{'ATK':consulate.copy(), 'DEF':consulate.copy()},
+                'BANK':{'ATK':bank.copy(), 'DEF':bank.copy()}
             }
             if not os.path.exists('../profiles'):
                 os.makedirs('../profiles')
@@ -81,9 +83,9 @@ class Player():
     #Define a function that outputs a visualization of the data.
     #input: map_string
     #output: visual of data
-    def visualize_data(self, map_string):
+    def visualize_data(self, map_string, affiliation):
         #Define the map based on map_string
-        map = self.player_data[map_string]
+        map = self.player_data[map_string][affiliation]
         #Define colormap to store the colors of the nodes
         node_color_map = []
         #Calculate the mean value of the node_visited attribute
@@ -115,5 +117,27 @@ class Player():
                 #Red is heavily traveled
                 edge_color_map.append('red')
         #Graph the map with the colored nodes and edges
-        nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
+        nx.draw(map, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
         plt.show()
+
+    #Define a function that will take a player's current data dictionary and update it with new fields
+    #input: player data
+    #output: player data with added fields
+    def add_fields(self):
+        for key in self.player_data:
+            #If map
+            if type(self.player_data[key]) == type(dict()):
+                default_map_data = get_map(key)
+                default_node_attributes = list(default_map_data.node(data=True))[0][-1]
+                default_edge_attributes = list(default_map_data.edges(data=True))[0][-1]
+                for affiliation in self.player_data[key]:
+                    player_node_attributes = list(self.player_data[key][affiliation].node(data=True))[0][-1]
+                    player_edge_attributes = list(self.player_data[key][affiliation].edges(data=True))[0][-1]
+                    #Nodes
+                    for attribute in list(default_node_attributes.keys()):
+                        if attribute not in list(player_node_attributes.keys()):
+                            nx.set_node_attributes(self.player_data[key][affiliation], nx.get_node_attributes(default_map_data, attribute), attribute)
+                    #Edges
+                    for attribute in list(default_edge_attributes.keys()):
+                        if attribute not in list(player_edge_attributes.keys()):
+                            nx.set_edge_attributes(self.player_data[key][affiliation], nx.get_edge_attributes(default_map_data, attribute), attribute)

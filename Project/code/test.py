@@ -16,6 +16,7 @@ def test_paths(map):
 #Run test by passing in a map
 test_paths(coastline)
 test_paths(border)
+test_paths(kafedostoyevsky)
 ## TODO: TESTING: Add the rest of the maps once they are complete.
 
 #Create a function that checks if the clean function works for text related to the OCR.
@@ -35,6 +36,7 @@ def test_get_map_strings(map, nodes_expected):
 #Run the test by passing in a map and the expected number of nodes.
 test_get_map_strings(coastline, 37)
 test_get_map_strings(border, 47)
+test_get_map_strings(kafedostoyevsky, 51)
 ## TODO: TESTING: Add for each map and double check nodes_expected by counting by hand
 
 #Create a test that checks if the update_data function works for a player object. Note that this specific test is used to check for updates in node_visited and edge_visited.

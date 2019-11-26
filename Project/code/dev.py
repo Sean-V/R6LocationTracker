@@ -51,6 +51,14 @@ while True:
         crop_image_location = image[location[1]:location[1]+location[3], location[0]:location[0]+location[2]]
         crop_image_callout1 = image[callout1[1]:callout1[1]+callout1[3], callout1[0]:callout1[0]+callout1[2]]
         crop_image_callout2 = image[callout2[1]:callout2[1]+callout2[3], callout2[0]:callout2[0]+callout2[2]]
+
+        #cv2.imshow('location', crop_image_location)
+        #cv2.waitKey(0)
+        #cv2.imshow('callout_1', crop_image_callout1)
+        #cv2.waitKey(0)
+        #cv2.imshow('callout_2', crop_image_callout2)
+        #cv2.waitKey(0)
+
         #Define bound for processing
         #Current method takes the max vlue of the pixel in the image and subtracts the mean of pixel values. this should theoretically make the text white and the background black but we end up swapping values in the function to make the text black and the background white
         bound = np.max(image) - np.mean(image)
@@ -70,19 +78,19 @@ while True:
         text_callout = text_callout1 + text_callout2
         #If map and affiliation not known, then we need to try to determine map and affiliation for round
         if (map_string, affiliation) == (None, None):
-            map_string, affiliation = get_round_map_status(text_location + text_callout)
+            map_string, affiliation, first_match = get_round_map_status(text_location + text_callout)
+            #This takes caore of the first instance for adding to path path_traveled
+            if first_match != None:
+                path_traveled.append(first_match)
+                print(path_traveled)
         #If map and affiliation are known then we can build paths
-        if (map_string, affiliation) != (None, None):
+        if path_traveled:
             text = clean(text_location + text_callout, map_string)
             #Now that we have our text, we will check if a valid callout is constructed. If it is, we will check if a player has moved from their current position. If so, the callout will be added to a list that represents the path traveled.
             #Start storing location changes into a list
             current_pos = text
-            #This takes care of the first instance when there is no previously traveled location (the player has just spawned)
-            if len(path_traveled) == 0 and current_pos != None:
-                path_traveled.append(current_pos)
-                print(path_traveled)
             #This takes care of every other relevant instance of changes in location
-            elif current_pos != None and path_traveled[-1] != current_pos:
+            if current_pos != None and path_traveled[-1] != current_pos:
                 path_traveled.append(current_pos)
                 print(path_traveled)
             ## TODO: ACCURACY: Make a better error handling system for if the program accidently skips over a room.
