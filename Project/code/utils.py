@@ -131,6 +131,8 @@ def screen_capture(resolution):
 
 #Create a function that returns whether the player was/is on attack or defense
 def get_round_map_status(callout):
+    #Clean callout
+    callout =  "".join([symbol for symbol in callout if symbol in accepted_symbols])
     #Search through maps
     for map in map_spawns:
         #Search through affiliations

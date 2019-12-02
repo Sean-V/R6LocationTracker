@@ -71,8 +71,11 @@ while True:
         #store result of OCR processing for each subset frame
         text_location = (image_to_string(proc_image_location, lang='eng')).upper()
         #1F is frequently read as TF by the OCR so we are going to preemptively alter this so that callouts like 1FHALLWAY and 2FHALLWAY do not get confused
-        if text_location == "TF":
-            text_location = "1F"
+        #Likewise, 3F is often read as BF which the program sometimes defaults to 1F due to the levenshtein error check
+        if text_location == 'TF':
+            text_location = '1F'
+        elif text_location == 'BF':
+            text_location = '3F'
         text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()
         text_callout2 = (image_to_string(proc_image_callout2, lang='eng')).upper()
         text_callout = text_callout1 + text_callout2
