@@ -41,53 +41,55 @@ test_get_map_strings(kafedostoyevsky, 51)
 
 #Create a test that checks if the update_data function works for a player object. Note that this specific test is used to check for updates in node_visited and edge_visited.
 #A failure in these assertions means that node_visited and edge_visited are not correctly being updated in player_data.
-def test_update_data():
-    test_map_coastline = coastline
+def test_update_data(affiliation):
+    test_map_coastline = coastline.copy()
     path_traveled = ['EXTMAINENTRANCE', 'EXTPOOL', 'EXTRUINS', 'EXTROOFTOP', '1FCOURTYARD']
     for index in range(len(path_traveled)):
-        test_map_coastline.nodes[path_traveled[index]]['node_visited'] += 1
+        test_map_coastline.nodes[path_traveled[index]][f'node_visited_{affiliation}'] += 1
         if index != len(path_traveled) - 1:
-            test_map_coastline[path_traveled[index]][path_traveled[index+1]]['edge_visited'] += 1
-    assert all(node[1]['node_visited'] == 1 for node in test_map_coastline.nodes(data=True) if node[0] in path_traveled)
-    assert all(node[1]['node_visited'] == 0 for node in test_map_coastline.nodes(data=True) if node[0] not in path_traveled)
-    assert test_map_coastline['EXTMAINENTRANCE']['EXTPOOL']['edge_visited'] == 1
-    assert test_map_coastline['EXTPOOL']['EXTRUINS']['edge_visited'] == 1
-    assert test_map_coastline['EXTRUINS']['EXTROOFTOP']['edge_visited'] == 1
-    assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD']['edge_visited'] == 1
+            test_map_coastline[path_traveled[index]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
+    assert all(node[1][f'node_visited_{affiliation}'] == 1 for node in test_map_coastline.nodes(data=True) if node[0] in path_traveled)
+    assert all(node[1][f'node_visited_{affiliation}'] == 0 for node in test_map_coastline.nodes(data=True) if node[0] not in path_traveled)
+    assert test_map_coastline['EXTMAINENTRANCE']['EXTPOOL'][f'edge_visited_{affiliation}'] == 1
+    assert test_map_coastline['EXTPOOL']['EXTRUINS'][f'edge_visited_{affiliation}'] == 1
+    assert test_map_coastline['EXTRUINS']['EXTROOFTOP'][f'edge_visited_{affiliation}'] == 1
+    assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD'][f'edge_visited_{affiliation}'] == 1
 #Run tests
-test_update_data()
+test_update_data('ATK')
+test_update_data('DEF')
 
 #Create a test to test the visualizer with node and edge data only.
 #This test will be run and evaluated intuitively.
-def test_node_edge_visuals():
+def test_node_edge_visuals(affiliation):
     #Change map to test for different maps
-    test_map = coastline
+    test_map = coastline.copy()
     node_color_map = []
     for node in test_map.nodes(data=True):
-        node[1]['node_visited'] = random.randint(0,100)
-    mean_node_visited = sum([node[1]['node_visited'] for node in test_map.nodes(data=True)])//len(test_map.nodes())
+        node[1][f'node_visited_{affiliation}'] = random.randint(0,100)
+    mean_node_visited = sum([node[1][f'node_visited_{affiliation}'] for node in test_map.nodes(data=True)])//len(test_map.nodes())
     for node in test_map.nodes(data=True):
-        if node[1]['node_visited'] <= mean_node_visited - (mean_node_visited//2):
+        if node[1][f'node_visited_{affiliation}'] <= mean_node_visited - (mean_node_visited//2):
             node_color_map.append('blue')
-        elif node[1]['node_visited'] <= mean_node_visited + (mean_node_visited//2):
+        elif node[1][f'node_visited_{affiliation}'] <= mean_node_visited + (mean_node_visited//2):
             node_color_map.append('yellow')
         else:
             node_color_map.append('red')
     edge_color_map = []
     for edge in test_map.edges(data=True):
-        edge[-1]['edge_visited'] = random.randint(0,100)
-    mean_edge_visited = sum([edge[-1]['edge_visited'] for edge in test_map.edges(data=True)])//len(test_map.edges())
+        edge[-1][f'edge_visited_{affiliation}'] = random.randint(0,100)
+    mean_edge_visited = sum([edge[-1][f'edge_visited_{affiliation}'] for edge in test_map.edges(data=True)])//len(test_map.edges())
     for edge in test_map.edges(data=True):
-        if edge[-1]['edge_visited'] <= mean_edge_visited - (mean_edge_visited//2):
+        if edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited - (mean_edge_visited//2):
             edge_color_map.append('blue')
-        elif edge[-1]['edge_visited'] <= mean_edge_visited + (mean_edge_visited//2):
+        elif edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited + (mean_edge_visited//2):
             edge_color_map.append('yellow')
         else:
             edge_color_map.append('red')
     #nx.draw(coastline, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
     #plt.show()
 #Run test
-test_node_edge_visuals()
+test_node_edge_visuals('ATK')
+test_node_edge_visuals('DEF')
 
 #Create a test that checks if all map spawns are unique. This is important because if they are, then we are able to differentiate between maps based on spawn.
 def test_unique_spawns():
@@ -101,14 +103,14 @@ def test_unique_spawns():
 assert test_unique_spawns() == True
 
 #Create assertions for get_round_map_status function
-assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK')
-assert get_round_map_status('XTMAINENTRANC') == ('COASTLINE', 'ATK')
-assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF')
-assert get_round_map_status('2FTEATE') == ('COASTLINE', 'DEF')
-assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK')
-assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK')
-assert get_round_map_status('EXT') == (None, None)
-assert get_round_map_status('VALLEY') == (None, None)
+assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK', 'EXTMAINENTRANCE')
+assert get_round_map_status('XTMAINENTRANC') == ('COASTLINE', 'ATK', 'EXTMAINENTRANCE')
+assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF', '2FTHEATER')
+assert get_round_map_status('2FTEATE') == ('COASTLINE', 'DEF', '2FTHEATER')
+assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK', 'EXTVALLEY')
+assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK', 'EXTVALLEY')
+assert get_round_map_status('EXT') == (None, None, None)
+assert get_round_map_status('VALLEY') == (None, None, None)
 
 #Create a generic funtion that can be used to run test code to put in places that are not run easily.
 def generic_test():

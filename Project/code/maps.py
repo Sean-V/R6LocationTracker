@@ -19,7 +19,7 @@ border_def_spawns = ['1FSERVERROOM', '2FARMORYLOCKERS', '1FCUSTOMSINSPECTION', '
 kafedostoyevsky_atk_spawns = ['EXTRIVERDOCKS', 'EXTCHRISTMASMARKET', 'EXTPARK']
 kafedostoyevsky_def_spawns = ['3FBAR', '1FKITCHENCOOKING', '1FKITCHENSERVICE', '2FREADINGROOMCORRIDOR', '2FREADINGROOM', '2FFIREPLACEHALL', '2FTRAINMUSEUM', '2FMININGROOM']
 clubhouse_atk_spawns = ['EXTCONSTRUCTIONSITE', 'EXTWAREHOUSE', 'EXTSHIPPINGDOCK', 'EXTMAINGATE']
-clubhouse_def_spawns = ['BCHURCH', '2FCASHROOM', '2FBEDROOM', ] #FINISH
+clubhouse_def_spawns = ['BCHURCH', '2FCASHROOM', '2FBEDROOM', '1FSTAGE']
 villa_atk_spawns = []
 villa_def_spawns = []
 consulate_atk_spawns = []
@@ -80,7 +80,7 @@ coastline.add_edges_from([
     ('1FOFFICE', 'EXTTERRACE'), ('1FOFFICE', '1FSUNROOM'), ('1FOFFICE', '1FBLUEBAR'),
     ('1FPOOLENTRANCE', '1FSUNRISEBAR'), ('1FPOOLENTRANCE', 'EXTRUINS'), ('1FPOOLENTRANCE', 'EXTPOOL'),
     ('2FBATHROOM', '2FPENTHOUSE')
-], open = True, edge_visited = 0)
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 #There are some ghost edges that will always be 0 but exist for the testing:
 #('1FWAITINGROOM', 'EXTSOUTHBALCONY')
@@ -133,7 +133,7 @@ border.add_edges_from([
     ('2FBREAKROOM', 'EXTSOUTHBALCONY'), ('2FBREAKROOM', '2FMAINHALLWAY'), ('2FBREAKROOM', '2FSECURITYROOM'),
     ('2FSECURITYROOM', 'EXTWESTBALCONY'), ('2FSECURITYROOM', '2FBREAKROOM'),
     ('1FCUSTOMSDESK', '1FCUSTOMSINSPECTION')
-], open = True, edge_visited = 0)
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 #There are some ghost edges that will always be 0 but exist for the testing:
 #('2FPILLARROOM', '3FCIGARBALCONY')
@@ -190,7 +190,7 @@ kafedostoyevsky.add_edges_from([
     ('3FBAR', '2FPILLARROOM'), ('3FBAR', '3FCOCKTAILLOUNGE'), ('3FBAR', '3FCIGARSHOP'), ('3FBAR', '3FCIGARBALCONY'), ('3FBAR', 'EXTCAFEROOFTOP'), ('3FBAR', '3FBARBACKSTORE'),
     ('3FBARBACKSTORE', '3FBAR'), ('3FBARBACKSTORE', '3FBARFREEZER'),
     ('3FBARFREEZER', '3FBARBACKSTORE')
-], open = True, edge_visited = 0)
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 #Add default closed rooms for each map
 #Closed includes hatches and soft walls
@@ -211,7 +211,7 @@ coastline.add_edges_from([
     ('1FSECURITYROOM', '2FSOUTHHALLYWAY'),
     ('1FOFFICE', '2FAQUARIUM'),
     ('2FAQUARIUM', '1FOFFICE')
-], open = False, edge_visited = 0)
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 border.add_edges_from([
     ('EXTPARKINGLOTALLEY', '1FDETENTION'),
@@ -235,7 +235,7 @@ border.add_edges_from([
     ('2FARCHIVES', '2FOFFICES'), ('2FARCHIVES', '1FWORKSHOP'),
     ('1FCUSTOMSDESK', '2FSECURITYROOM'),
     ('2FARMORYDESK', '1FSERVERROOM')
-], open = False, edge_visited = 0)
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 kafedostoyevsky.add_edges_from([
     ('EXTCAFEROOFTOP', '3FREDSTAIRS'), ('EXTCAFEROOFTOP', '3FCIGARBALCONY'),
@@ -261,16 +261,35 @@ kafedostoyevsky.add_edges_from([
     ('3FBARBACKSTORE', '3FCOCKTAILLOUNGEENTRANCE'), ('3FBARBACKSTORE', '3FWASHROOM'), ('3FBARBACKSTORE', '3FCIGARLOUNGE'),
     ('3FWASHROOM', '3FBARBACKSTORE'), ('3FWASHROOM', '3FCIGARLOUNGE'),
     ('3FBAR', '3FCIGARLOUNGE')
-], open = False, edge_visited = 0)
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 #Set node attributes for each map.
-nx.set_node_attributes(coastline, 0, 'node_visited')
-nx.set_node_attributes(border, 0, 'node_visited')
-nx.set_node_attributes(kafedostoyevsky, 0, 'node_visited')
-nx.set_node_attributes(clubhouse, 0, 'node_visited')
-nx.set_node_attributes(villa, 0, 'node_visited')
-nx.set_node_attributes(consulate, 0, 'node_visited')
-nx.set_node_attributes(bank, 0, 'node_visited')
+nx.set_node_attributes(coastline, 0, 'node_visited_ATK')
+nx.set_node_attributes(border, 0, 'node_visited_ATK')
+nx.set_node_attributes(kafedostoyevsky, 0, 'node_visited_ATK')
+nx.set_node_attributes(clubhouse, 0, 'node_visited_ATK')
+nx.set_node_attributes(villa, 0, 'node_visited_ATK')
+nx.set_node_attributes(consulate, 0, 'node_visited_ATK')
+nx.set_node_attributes(bank, 0, 'node_visited_ATK')
+nx.set_node_attributes(coastline, 0, 'node_visited_DEF')
+nx.set_node_attributes(border, 0, 'node_visited_DEF')
+nx.set_node_attributes(kafedostoyevsky, 0, 'node_visited_DEF')
+nx.set_node_attributes(clubhouse, 0, 'node_visited_DEF')
+nx.set_node_attributes(villa, 0, 'node_visited_DEF')
+nx.set_node_attributes(consulate, 0, 'node_visited_DEF')
+nx.set_node_attributes(bank, 0, 'node_visited_DEF')
 
-## TODO: DATA: Add node attributes for death.
-## TODO: DATA: Add edge attributes for death.
+nx.set_node_attributes(coastline, 0, 'deaths_ATK')
+nx.set_node_attributes(border, 0, 'deaths_ATK')
+nx.set_node_attributes(kafedostoyevsky, 0, 'deaths_ATK')
+nx.set_node_attributes(clubhouse, 0, 'deaths_ATK')
+nx.set_node_attributes(villa, 0, 'deaths_ATK')
+nx.set_node_attributes(consulate, 0, 'deaths_ATK')
+nx.set_node_attributes(bank, 0, 'deaths_ATK')
+nx.set_node_attributes(coastline, 0, 'deaths_DEF')
+nx.set_node_attributes(border, 0, 'deaths_DEF')
+nx.set_node_attributes(kafedostoyevsky, 0, 'deaths_DEF')
+nx.set_node_attributes(clubhouse, 0, 'deaths_DEF')
+nx.set_node_attributes(villa, 0, 'deaths_DEF')
+nx.set_node_attributes(consulate, 0, 'deaths_DEF')
+nx.set_node_attributes(bank, 0, 'deaths_DEF')
