@@ -79,6 +79,9 @@ class Player():
                 except:
                     ## TODO: ACCURACY: Have some sort of correction or disregard method that is more extensive than what is currently in place.
                     pass
+        #Update death statistics
+        self.player_data[map_string].nodes[path_traveled[-1]][f'deaths_{affiliation}'] += 1
+        self.player_data[map_string][path_traveled[-2]][path_traveled[-1]][f'deaths_{affiliation}'] += 1
 
     #Define a function that outputs a visualization of the data.
     #input: map_string

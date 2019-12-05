@@ -50,10 +50,14 @@ def test_update_data(affiliation):
             test_map_coastline[path_traveled[index]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
     assert all(node[1][f'node_visited_{affiliation}'] == 1 for node in test_map_coastline.nodes(data=True) if node[0] in path_traveled)
     assert all(node[1][f'node_visited_{affiliation}'] == 0 for node in test_map_coastline.nodes(data=True) if node[0] not in path_traveled)
+    test_map_coastline.nodes[path_traveled[-1]][f'deaths_{affiliation}'] += 1
+    test_map_coastline[path_traveled[-2]][path_traveled[-1]][f'deaths_{affiliation}'] += 1
     assert test_map_coastline['EXTMAINENTRANCE']['EXTPOOL'][f'edge_visited_{affiliation}'] == 1
     assert test_map_coastline['EXTPOOL']['EXTRUINS'][f'edge_visited_{affiliation}'] == 1
     assert test_map_coastline['EXTRUINS']['EXTROOFTOP'][f'edge_visited_{affiliation}'] == 1
     assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD'][f'edge_visited_{affiliation}'] == 1
+    assert test_map_coastline['EXTROOFTOP']['1FCOURTYARD'][f'deaths_{affiliation}'] == 1
+    assert test_map_coastline.nodes['1FCOURTYARD'][f'deaths_{affiliation}'] == 1
 #Run tests
 test_update_data('ATK')
 test_update_data('DEF')
