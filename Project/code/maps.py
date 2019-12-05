@@ -19,7 +19,7 @@ border_def_spawns = ['1FSERVERROOM', '2FARMORYLOCKERS', '1FCUSTOMSINSPECTION', '
 kafedostoyevsky_atk_spawns = ['EXTRIVERDOCKS', 'EXTCHRISTMASMARKET', 'EXTPARK']
 kafedostoyevsky_def_spawns = ['3FBAR', '1FKITCHENCOOKING', '1FKITCHENSERVICE', '2FREADINGROOMCORRIDOR', '2FREADINGROOM', '2FFIREPLACEHALL', '2FTRAINMUSEUM', '2FMININGROOM']
 clubhouse_atk_spawns = ['EXTCONSTRUCTIONSITE', 'EXTWAREHOUSE', 'EXTSHIPPINGDOCK', 'EXTMAINGATE']
-clubhouse_def_spawns = ['BCHURCH', '2FCASHROOM', '2FBEDROOM', ] #FINISH
+clubhouse_def_spawns = ['BCHURCH', '2FCASHROOM', '2FBEDROOM', '1FSTAGE']
 villa_atk_spawns = []
 villa_def_spawns = []
 consulate_atk_spawns = []
@@ -192,6 +192,11 @@ kafedostoyevsky.add_edges_from([
     ('3FBARFREEZER', '3FBARBACKSTORE')
 ], open = True, edge_visited = 0)
 
+#There are some ghost edges that will always be 0 but exist for the testing:
+clubhouse.add_edges_from([
+    
+], open = True, edge_visited = 0)
+
 #Add default closed rooms for each map
 #Closed includes hatches and soft walls
 coastline.add_edges_from([
@@ -261,6 +266,10 @@ kafedostoyevsky.add_edges_from([
     ('3FBARBACKSTORE', '3FCOCKTAILLOUNGEENTRANCE'), ('3FBARBACKSTORE', '3FWASHROOM'), ('3FBARBACKSTORE', '3FCIGARLOUNGE'),
     ('3FWASHROOM', '3FBARBACKSTORE'), ('3FWASHROOM', '3FCIGARLOUNGE'),
     ('3FBAR', '3FCIGARLOUNGE')
+], open = False, edge_visited = 0)
+
+clubhouse.add_edges_from([
+
 ], open = False, edge_visited = 0)
 
 #Set node attributes for each map.

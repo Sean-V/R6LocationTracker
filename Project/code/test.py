@@ -101,14 +101,14 @@ def test_unique_spawns():
 assert test_unique_spawns() == True
 
 #Create assertions for get_round_map_status function
-assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK')
-assert get_round_map_status('XTMAINENTRANC') == ('COASTLINE', 'ATK')
-assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF')
-assert get_round_map_status('2FTEATE') == ('COASTLINE', 'DEF')
-assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK')
-assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK')
-assert get_round_map_status('EXT') == (None, None)
-assert get_round_map_status('VALLEY') == (None, None)
+assert get_round_map_status('EXTMAINENTRANCE') == ('COASTLINE', 'ATK', 'EXTMAINENTRANCE')
+assert get_round_map_status('XTMAINENTRANC') == ('COASTLINE', 'ATK', 'EXTMAINENTRANCE')
+assert get_round_map_status('2FTHEATER') == ('COASTLINE', 'DEF', '2FTHEATER')
+assert get_round_map_status('2FTEATE') == ('COASTLINE', 'DEF', '2FTHEATER')
+assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK', 'EXTVALLEY')
+assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK', 'EXTVALLEY')
+assert get_round_map_status('EXT') == (None, None, None)
+assert get_round_map_status('VALLEY') == (None, None, None)
 
 #Create a generic funtion that can be used to run test code to put in places that are not run easily.
 def generic_test():
