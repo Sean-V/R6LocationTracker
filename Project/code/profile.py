@@ -13,8 +13,8 @@ class Player():
         #Ask for player's in game name to either load or create a profile
         self.alias = def_alias or input('Enter your in game name for Rainbow Six Siege:\n')
         #Check if player file exists already
-        if os.path.exists(f'profiles/{self.alias}.pickle'):
-            player_file = open(f'profiles/{self.alias}.pickle', 'rb')
+        if os.path.exists(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles\\{self.alias}.pickle'):
+            player_file = open(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles\\{self.alias}.pickle', 'rb')
             self.player_data = pickle.load(player_file)
             #Player's resolution as given by tuple
             self.resolution = self.player_data['resolution']
@@ -48,9 +48,9 @@ class Player():
                 'CONSULATE':consulate.copy(),
                 'BANK':bank.copy()
             }
-            if not os.path.exists('profiles'):
-                os.makedirs('profiles')
-            player_file = open(f'profiles/{self.alias}.pickle', 'wb+')
+            if not os.path.exists(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles'):
+                os.makedirs(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles')
+            player_file = open(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles\\{self.alias}.pickle', 'wb+')
             pickle.dump(self.player_data, player_file)
             player_file.close()
 
@@ -58,7 +58,7 @@ class Player():
     #input: player object and data
     #output: appends new data to player's existing data
     def store_data(self):
-        player_file = open(f'profiles/{self.alias}.pickle', 'wb+')
+        player_file = open(f'{os.path.dirname(os.path.realpath(__file__))}\\profiles\\{self.alias}.pickle', 'wb+')
         pickle.dump(self.player_data, player_file)
         player_file.close()
 

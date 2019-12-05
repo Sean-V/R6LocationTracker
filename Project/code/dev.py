@@ -15,9 +15,9 @@ pytesseract.pytesseract.tesseract_cmd = 'C:{}\\AppData\\Local\\Tesseract-OCR\\te
 player = Player()
 
 #Output current data for player for testing
-#print(player.player_data[map_string].nodes(data=True))
-#print(player.player_data[map_string].edges(data=True))
-#player.visualize_data(map_string)
+#print(player.player_data['KAFEDOSTOYEVSKY'].nodes(data=True))
+#player.visualize_data('KAFEDOSTOYEVSKY', 'ATK', ['visited'])
+#player.visualize_data('KAFEDOSTOYEVSKY', 'DEF', ['visited'])
 
 #Define some initial variables
 #location, callout1, callout2, playerbox will contain coordinates needed to grab specific data from each screen
