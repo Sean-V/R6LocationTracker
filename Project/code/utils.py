@@ -53,8 +53,41 @@ def clean(output, map_string):
     if matching_list:
         min_match = min(matching_list, key = lambda pairs: pairs[1])
         best_match = min_match[0] if min_match[1] <= 2 and min_match[0] != '' else None
+        if best_match != None:
+            #These will be coastline specific alterations
+            if map_string == 'COASTLINE':
+                pass
+            #These will be border specific alterations
+            elif map_string == 'BORDER':
+                pass
+            #These will be kafedostoyevsky specific alterations
+            elif map_string == 'KAFEDOSTOYEVSKY':
+                pass
+            #These will be clubhouse specific alterations
+            elif map_string == 'CLUBHOUSE':
+                pass
+            #These will be villa specific alterations
+            elif map_string == 'VILLA':
+                pass
+            #These will be consulate specific alterations
+            elif map_string == 'CONSULATE':
+                pass
+            #These will be bank specific alterations
+            elif map_string == 'BANK':
+                pass
         return best_match
     return None
+
+#Define a function that will pre-clean the location part of the callout
+#input: location
+#output: cleaned state of location
+def pre_clean(location):
+    #These will be global changes that happen for each map
+    if location == 'TF':
+        location = '1F'
+    elif location == 'BF':
+        location = '3F'
+    return location
 
 #Define a function to process an image before throwing it into OCR
 #input: image, bound for determining white and black pixels
@@ -149,3 +182,17 @@ def get_round_map_status(callout):
                     return map, affiliation, best_match
     #Default None, None if best match not found accross all maps
     return None, None, None
+
+#Create a function that will perform some sort of smart analysis for missing callouts. The current method will take two gap points and see if there is only one connector. If so, then the path traveled will be updated to reflect this new movement.
+#input: two nodes not connected by an edge
+#ouput: common node that connects the two and forms only possible path from one to another
+## TODO: INJECTION: Implement this function somewhere in the code
+def reconstruct_path(call1, call2, map_string):
+    map = get_map(map_string)
+    call1_keys = set(map[call1].keys())
+    call2_keys = set(map[call2].keys())
+    call_intersect = call1_keys.intersection(call2_keys)
+    print(call_intersect)
+    if len(call_intersect) == 1:
+        return call_intersect.pop()
+    return None

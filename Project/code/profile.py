@@ -6,7 +6,7 @@ import pickle
 import matplotlib.pyplot as plt
 import networkx as nx
 import sys
-from utils import get_map
+from utils import get_map, reconstruct_path
 
 class Player():
     def __init__(self, def_alias=None, def_resolution=None, def_aspect_ratio=None):
@@ -24,8 +24,8 @@ class Player():
         #Create a new user
         else:
             #Acquire player parameters through user input
-            resolution = def_resolution or input('What is your resolution? (Compatibile resolutions include anything with the same ratio as 1920x1080)\n')
-            if resolution not in ['1920x1080', '2560x1440']:
+            resolution = def_resolution or input('What is your resolution? (Compatibile resolutions include 1280x720, 1920x1080, and 2560x1440)\n')
+            if resolution not in ['1280x720', '1920x1080', '2560x1440']:
                 print('Incompatibile resolution found!')
                 sys.exit(0)
             aspect_ratio = def_aspect_ratio or input('What is your aspect ratio? (Compatibile aspect ratios include 3:2, 4:3, 5:4, 16:9, and 16:10)\n')
@@ -77,8 +77,13 @@ class Player():
                 try:
                     self.player_data[map_string][path_traveled[index]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
                 except:
-                    ## TODO: ACCURACY: Have some sort of correction or disregard method that is more extensive than what is currently in place.
-                    pass
+                    ## TODO: ACCURACY: Have some sort of correction or disregard method that is more extensive than what is currently in place. Current method checks a one site skip and will fix path if there is only one possible option path could have been.
+                    result = reconstruct_path(path_traveled[index], path_traveled[index+1, map_string])
+                    if result is not None:
+                        self.player_data[map_string][path_traveled[index]][result][f'edge_visited_{affiliation}'] += 1
+                        self.player_data[map_string][path_traveled[result]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
+                        self.player_data[map_string].nodes[result][f'node_visited_{affiliation}'] += 1
+
         #Update death statistics
         self.player_data[map_string].nodes[path_traveled[-1]][f'deaths_{affiliation}'] += 1
         self.player_data[map_string][path_traveled[-2]][path_traveled[-1]][f'deaths_{affiliation}'] += 1

@@ -70,25 +70,20 @@ while True:
         #Now that our images have been processed, we can throw those images into the OCR to acquire our text. We will than perform some sanitization and correct error that is within reason.
         #store result of OCR processing for each subset frame
         text_location = (image_to_string(proc_image_location, lang='eng')).upper()
-        #1F is frequently read as TF by the OCR so we are going to preemptively alter this so that callouts like 1FHALLWAY and 2FHALLWAY do not get confused
-        #Likewise, 3F is often read as BF which the program sometimes defaults to 1F due to the levenshtein error check
-        if text_location == 'TF':
-            text_location = '1F'
-        elif text_location == 'BF':
-            text_location = '3F'
+        text_location = pre_clean(text_location)
         text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()
         text_callout2 = (image_to_string(proc_image_callout2, lang='eng')).upper()
-        text_callout = text_callout1 + text_callout2
+        text_callout = location + text_callout1 + text_callout2
         #If map and affiliation not known, then we need to try to determine map and affiliation for round
         if (map_string, affiliation) == (None, None):
-            map_string, affiliation, first_match = get_round_map_status(text_location + text_callout)
+            map_string, affiliation, first_match = get_round_map_status(text_callout)
             #This takes caore of the first instance for adding to path path_traveled
             if first_match != None:
                 path_traveled.append(first_match)
                 print(path_traveled)
         #If map and affiliation are known then we can build paths
         if path_traveled:
-            text = clean(text_location + text_callout, map_string)
+            text = clean(text_callout, map_string)
             #Now that we have our text, we will check if a valid callout is constructed. If it is, we will check if a player has moved from their current position. If so, the callout will be added to a list that represents the path traveled.
             #Start storing location changes into a list
             current_pos = text

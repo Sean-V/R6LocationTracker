@@ -1,6 +1,6 @@
 #This file will contain different tests to make sure the code works across different versions.
 
-from utils import get_map_location_strings, clean, get_round_map_status
+from utils import get_map_location_strings, clean, get_round_map_status, pre_clean
 from maps import coastline, border, kafedostoyevsky, clubhouse, villa, consulate, bank, map_spawns
 import networkx as nx
 import random
@@ -115,6 +115,20 @@ assert get_round_map_status('EXTVALLEY') == ('BORDER', 'ATK', 'EXTVALLEY')
 assert get_round_map_status('EXTVAEY') == ('BORDER', 'ATK', 'EXTVALLEY')
 assert get_round_map_status('EXT') == (None, None, None)
 assert get_round_map_status('VALLEY') == (None, None, None)
+
+#Test reconstruct path function for functionality.
+def test_reconstruct_path(call1, call2):
+    test_map_coastline = coastline.copy()
+    call1_keys = set(test_map_coastline[call1].keys())
+    call2_keys = set(test_map_coastline[call2].keys())
+    call_intersect = call1_keys.intersection(call2_keys)
+    print(call_intersect)
+    if len(call_intersect) == 1:
+        return call_intersect.pop()
+    return None
+assert test_reconstruct_path('1FSECURITYROOM', '1FOFFICE') == '1FSUNROOM'
+assert test_reconstruct_path('EXTMAINENTRANCE', '1FCOURTYARD') == None
+assert test_reconstruct_path('EXTMAINENTRANCE', 'EXTRUINS') == None
 
 #Create a generic funtion that can be used to run test code to put in places that are not run easily.
 def generic_test():
