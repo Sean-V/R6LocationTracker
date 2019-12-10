@@ -2,7 +2,7 @@
 
 import os
 import cv2
-from utils import clean, process_image, get_containers, is_player_alive, screen_capture, get_round_map_status
+from utils import clean, process_image, get_containers, is_player_alive, screen_capture, get_round_map_status, pre_clean
 from profile import Player
 import pytesseract
 import numpy as np
@@ -73,7 +73,7 @@ while True:
         text_location = pre_clean(text_location)
         text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()
         text_callout2 = (image_to_string(proc_image_callout2, lang='eng')).upper()
-        text_callout = location + text_callout1 + text_callout2
+        text_callout = text_location + text_callout1 + text_callout2
         #If map and affiliation not known, then we need to try to determine map and affiliation for round
         if (map_string, affiliation) == (None, None):
             map_string, affiliation, first_match = get_round_map_status(text_callout)

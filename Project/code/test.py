@@ -122,7 +122,6 @@ def test_reconstruct_path(call1, call2):
     call1_keys = set(test_map_coastline[call1].keys())
     call2_keys = set(test_map_coastline[call2].keys())
     call_intersect = call1_keys.intersection(call2_keys)
-    print(call_intersect)
     if len(call_intersect) == 1:
         return call_intersect.pop()
     return None
