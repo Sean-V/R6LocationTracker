@@ -72,16 +72,16 @@ class Player():
             #Update node_visited
             self.player_data[map_string].nodes[path_traveled[index]][f'node_visited_{affiliation}'] += 1
             #Update edge_visited
-            if index != len(path_traveled) - 1:
+            if index != len(path_traveled) - 1 and len(path_traveled) > 1:
                 #Use try except in order to skip location changes that are not valid.
                 try:
                     self.player_data[map_string][path_traveled[index]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
                 except:
                     ## TODO: ACCURACY: Have some sort of correction or disregard method that is more extensive than what is currently in place. Current method checks a one site skip and will fix path if there is only one possible option path could have been.
-                    result = reconstruct_path(path_traveled[index], path_traveled[index+1, map_string])
+                    result = reconstruct_path(path_traveled[index], path_traveled[index+1], map_string)
                     if result is not None:
                         self.player_data[map_string][path_traveled[index]][result][f'edge_visited_{affiliation}'] += 1
-                        self.player_data[map_string][path_traveled[result]][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
+                        self.player_data[map_string][result][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
                         self.player_data[map_string].nodes[result][f'node_visited_{affiliation}'] += 1
 
         #Update death statistics
