@@ -192,6 +192,11 @@ kafedostoyevsky.add_edges_from([
     ('3FBARFREEZER', '3FBARBACKSTORE')
 ], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
+#There are some ghost edges that will always be 0 but exist for the testing:
+clubhouse.add_edges_from([
+
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
 #Add default closed rooms for each map
 #Closed includes hatches and soft walls
 coastline.add_edges_from([
@@ -261,6 +266,10 @@ kafedostoyevsky.add_edges_from([
     ('3FBARBACKSTORE', '3FCOCKTAILLOUNGEENTRANCE'), ('3FBARBACKSTORE', '3FWASHROOM'), ('3FBARBACKSTORE', '3FCIGARLOUNGE'),
     ('3FWASHROOM', '3FBARBACKSTORE'), ('3FWASHROOM', '3FCIGARLOUNGE'),
     ('3FBAR', '3FCIGARLOUNGE')
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+clubhouse.add_edges_from([
+
 ], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 #Set node attributes for each map.
