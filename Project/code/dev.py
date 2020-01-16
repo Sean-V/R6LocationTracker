@@ -55,7 +55,7 @@ while True:
         #cv2.waitKey(0)
 
         #Define bound for processing
-        #Current method takes the max vlue of the pixel in the image and subtracts the mean of pixel values. this should theoretically make the text white and the background black but we end up swapping values in the function to make the text black and the background white
+        #Current method takes the max vlue of the pixel in the image and subtracts the mean of pixel values. this should theoretically make the text white and the background black but we end up swapping values in the function to make the text black and the background white.
         bound = np.max(image) - np.mean(image)
         #Process subset frames
         proc_image_location = process_image(crop_image_location.copy(), bound)
@@ -63,7 +63,7 @@ while True:
         proc_image_callout2 = process_image(crop_image_callout2.copy(), bound)
 
         #Now that our images have been processed, we can throw those images into the OCR to acquire our text. We will than perform some sanitization and correct error that is within reason.
-        #store result of OCR processing for each subset frame
+        #Store result of OCR processing for each subset frame
         text_location = (image_to_string(proc_image_location, lang='eng')).upper()
         text_location = pre_clean(text_location)
         text_callout1 = (image_to_string(proc_image_callout1, lang='eng')).upper()

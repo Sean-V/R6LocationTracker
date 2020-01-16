@@ -1,5 +1,7 @@
 ## TODO: EFFICIENCY: Make a more detailed installer to only include modules needed from each package.
 
+#run 'python setup.py bdist_msi' to create a windows installer
+
 import sys
 from cx_Freeze import setup, Executable
 

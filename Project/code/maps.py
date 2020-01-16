@@ -197,6 +197,21 @@ clubhouse.add_edges_from([
 
 ], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
+#There are some ghost edges that will always be 0 but exist for the testing:
+villa.add_edges_from([
+
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+#There are some ghost edges that will always be 0 but exist for the testing:
+consulate.add_edges_from([
+
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+#There are some ghost edges that will always be 0 but exist for the testing:
+bank.add_edges_from([
+
+], open = True, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
 #Add default closed rooms for each map
 #Closed includes hatches and soft walls
 coastline.add_edges_from([
@@ -269,6 +284,18 @@ kafedostoyevsky.add_edges_from([
 ], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
 clubhouse.add_edges_from([
+
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+villa.add_edges_from([
+
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+consulate.add_edges_from([
+
+], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
+
+bank.add_edges_from([
 
 ], open = False, edge_visited_ATK = 0, edge_visited_DEF = 0, deaths_ATK = 0, deaths_DEF = 0)
 
