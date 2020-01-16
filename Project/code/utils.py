@@ -192,7 +192,6 @@ def reconstruct_path(call1, call2, map_string):
     call1_keys = set(map[call1].keys())
     call2_keys = set(map[call2].keys())
     call_intersect = call1_keys.intersection(call2_keys)
-    print(call_intersect)
     if len(call_intersect) == 1:
         return call_intersect.pop()
     return None

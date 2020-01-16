@@ -14,11 +14,6 @@ pytesseract.pytesseract.tesseract_cmd = 'C:{}\\AppData\\Local\\Tesseract-OCR\\te
 #For now we will incorporate a preliminary UI that will run in the terminal. This will be built in the Player class in profile.py. This will allow us to easily remove the UI later.
 player = Player()
 
-#Output current data for player for testing
-#print(player.player_data['KAFEDOSTOYEVSKY'].nodes(data=True))
-#player.visualize_data('KAFEDOSTOYEVSKY', 'ATK', ['visited'])
-#player.visualize_data('KAFEDOSTOYEVSKY', 'DEF', ['visited'])
-
 #Define some initial variables
 #location, callout1, callout2, playerbox will contain coordinates needed to grab specific data from each screen
 location, callout1, callout2, playerbox = get_containers(player.resolution, player.aspect_ratio)

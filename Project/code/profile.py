@@ -84,88 +84,46 @@ class Player():
                         self.player_data[map_string][result][path_traveled[index+1]][f'edge_visited_{affiliation}'] += 1
                         self.player_data[map_string].nodes[result][f'node_visited_{affiliation}'] += 1
 
-        #Update death statistics
-        self.player_data[map_string].nodes[path_traveled[-1]][f'deaths_{affiliation}'] += 1
-        self.player_data[map_string][path_traveled[-2]][path_traveled[-1]][f'deaths_{affiliation}'] += 1
-
     #Define a function that outputs a visualization of the data.
     #input: map_string
     #output: visual of data
     ## TODO: SIMPLICITY: Create a better visualizer. This might be better as a class? Ultimately, we should be able to pass data in and have it loop and print verses having seperate conditionals for each data type.
-    def visualize_data(self, map_string, affiliation, data=[]):
-        if data:
-            if 'visited' in data:
-                #Define the map based on map_string
-                map = self.player_data[map_string]
-                #Define colormap to store the colors of the nodes
-                node_color_map = []
-                #Calculate the mean value of the node_visited attribute
-                mean_node_visited = sum([node[1][f'node_visited_{affiliation}'] for node in map.nodes(data=True)])//len(map.nodes())
-                #Color nodes based on the mean plus/minus half the mean
-                for node in map.nodes(data=True):
-                    if node[1][f'node_visited_{affiliation}'] <= mean_node_visited - (mean_node_visited//2):
-                        #Blue is lightly traveled
-                        node_color_map.append('blue')
-                    elif node[1][f'node_visited_{affiliation}'] <= mean_node_visited + (mean_node_visited//2):
-                        #Yellow is average traveled
-                        node_color_map.append('yellow')
-                    else:
-                        #Red is heavily traveled
-                        node_color_map.append('red')
-                #Define colormap to store the colors of the edges
-                edge_color_map = []
-                #Calculate the mean value of the edge_visited attribute
-                mean_edge_visited = sum([edge[-1][f'edge_visited_{affiliation}'] for edge in map.edges(data=True)])//len(map.edges())
-                #Color edges based on the mean plus/minus half the mean
-                for edge in map.edges(data=True):
-                    if edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited - (mean_edge_visited//2):
-                        #Blue is lightly traveled
-                        edge_color_map.append('blue')
-                    elif edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited + (mean_edge_visited//2):
-                        #Yellow is average traveled
-                        edge_color_map.append('yellow')
-                    else:
-                        #Red is heavily traveled
-                        edge_color_map.append('red')
-                #Graph the map with the colored nodes and edges
-                nx.draw(map, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
-                plt.show()
-            if 'deaths' in data:
-                #Define the map based on map_string
-                map = self.player_data[map_string]
-                #Define colormap to store the colors of the nodes
-                node_color_map = []
-                #Calculate the mean value of the deaths attribute
-                mean_node_visited = sum([node[1][f'deaths_{affiliation}'] for node in map.nodes(data=True)])//len(map.nodes())
-                #Color nodes based on the mean plus/minus half the mean
-                for node in map.nodes(data=True):
-                    if node[1][f'deaths_{affiliation}'] <= mean_node_visited - (mean_node_visited//2):
-                        #Blue is lightly traveled
-                        node_color_map.append('blue')
-                    elif node[1][f'deaths_{affiliation}'] <= mean_node_visited + (mean_node_visited//2):
-                        #Yellow is average traveled
-                        node_color_map.append('yellow')
-                    else:
-                        #Red is heavily traveled
-                        node_color_map.append('red')
-                #Define colormap to store the colors of the edges
-                edge_color_map = []
-                #Calculate the mean value of the deaths attribute
-                mean_edge_visited = sum([edge[-1][f'deaths_{affiliation}'] for edge in map.edges(data=True)])//len(map.edges())
-                #Color edges based on the mean plus/minus half the mean
-                for edge in map.edges(data=True):
-                    if edge[-1][f'deaths_{affiliation}'] <= mean_edge_visited - (mean_edge_visited//2):
-                        #Blue is lightly traveled
-                        edge_color_map.append('blue')
-                    elif edge[-1][f'deaths_{affiliation}'] <= mean_edge_visited + (mean_edge_visited//2):
-                        #Yellow is average traveled
-                        edge_color_map.append('yellow')
-                    else:
-                        #Red is heavily traveled
-                        edge_color_map.append('red')
-                #Graph the map with the colored nodes and edges
-                nx.draw(map, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
-                plt.show()
+    def visualize_data(self, map_string, affiliation):
+        #Define the map based on map_string
+        map = self.player_data[map_string]
+        #Define colormap to store the colors of the nodes
+        node_color_map = []
+        #Calculate the mean value of the node_visited attribute
+        mean_node_visited = sum([node[1][f'node_visited_{affiliation}'] for node in map.nodes(data=True)])//len(map.nodes())
+        #Color nodes based on the mean plus/minus half the mean
+        for node in map.nodes(data=True):
+            if node[1][f'node_visited_{affiliation}'] <= mean_node_visited - (mean_node_visited//2):
+                #Blue is lightly traveled
+                node_color_map.append('blue')
+            elif node[1][f'node_visited_{affiliation}'] <= mean_node_visited + (mean_node_visited//2):
+                #Yellow is average traveled
+                node_color_map.append('yellow')
+            else:
+                #Red is heavily traveled
+                node_color_map.append('red')
+        #Define colormap to store the colors of the edges
+        edge_color_map = []
+        #Calculate the mean value of the edge_visited attribute
+        mean_edge_visited = sum([edge[-1][f'edge_visited_{affiliation}'] for edge in map.edges(data=True)])//len(map.edges())
+        #Color edges based on the mean plus/minus half the mean
+        for edge in map.edges(data=True):
+            if edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited - (mean_edge_visited//2):
+                #Blue is lightly traveled
+                edge_color_map.append('blue')
+            elif edge[-1][f'edge_visited_{affiliation}'] <= mean_edge_visited + (mean_edge_visited//2):
+                #Yellow is average traveled
+                edge_color_map.append('yellow')
+            else:
+                #Red is heavily traveled
+                edge_color_map.append('red')
+        #Graph the map with the colored nodes and edges
+        nx.draw(map, with_labels=True, node_size=100, font_size=8, node_color=node_color_map, edge_color=edge_color_map)
+        plt.show()
 
     #Define a function that will take a player's current data dictionary and update it with new fields
     #input: player data
