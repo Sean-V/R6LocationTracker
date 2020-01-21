@@ -19,7 +19,7 @@ class Player():
             #Player's resolution as given by tuple
             self.resolution = self.player_data['resolution']
             #Player's aspect ratio
-            self.aspect_ratio = self.player_data['aspect_ratio']
+            self.aspect_ratio = [16,9] #self.player_data['aspect_ratio']
             player_file.close()
         #Create a new user
         else:
